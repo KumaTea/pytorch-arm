@@ -1,106 +1,19 @@
-#
-# https://github.com/docker-library/python/blob/master/3.9/buster/Dockerfile
-#
-
-FROM buildpack-deps:buster@%IMAGE_SHA256%
-
-
-ENV PATH /usr/local/bin:$PATH
-ENV LANG C.UTF-8
+FROM %IMAGE_WITH_SHA256%
 
 
 RUN set -ex \
 	\
-	&& apt-get update \
-	&& apt-get install -y --no-install-recommends \
-		libbluetooth-dev \
-		tk-dev \
-		uuid-dev \
 	&& echo "cd /root" >> /root/.bashrc \
+	&& apt update \
 	&& apt install -y bash build-essential ca-certificates cmake git libffi-dev libssl-dev nano ninja-build wget xz-utils zlib1g-dev \
 	&& rm -rf /var/lib/apt/lists/*
 
 
-
-RUN set -ex \
-        \
-        && cd /root \
-        && wget http://ffmpeg.org/releases/ffmpeg-4.3.2.tar.xz \
-        && tar -xJf ffmpeg-4.3.2.tar.xz \
-        && cd ffmpeg-4.3.2 \
-        && ./configure \
-        && make -j$(nproc) \
-        && make install \
-        && cd /root \
-        && rm -rf ffmpeg-4.3.2 ffmpeg-4.3.2.tar.xz
-
-
 RUN set -ex \
 	\
-	&& wget -O python.tar.xz "https://www.python.org/ftp/python/%PYTHON_VERSION%/Python-%PYTHON_VERSION%.tar.xz" \
-	&& mkdir -p /usr/src/python \
-	&& tar -xJC /usr/src/python --strip-components=1 -f python.tar.xz \
-	&& rm python.tar.xz \
-	\
-	&& cd /usr/src/python \
-	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
-	&& ./configure \
-		--build="$gnuArch" \
-		--enable-loadable-sqlite-extensions \
-		--enable-option-checking=fatal \
-		--enable-shared \
-		--with-system-expat \
-		--with-system-ffi \
-		--without-ensurepip \
-	&& make -j "$(nproc)" \
-	&& make install \
-	&& rm -rf /usr/src/python \
-	\
-	&& find /usr/local -depth \
-		\( \
-			\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
-			-o \( -type f -a \( -name '*.pyc' -o -name '*.pyo' -o -name '*.a' \) \) \
-		\) -exec rm -rf '{}' + \
-	\
-	&& ldconfig \
-	\
-	&& python3 --version
-
-# Remove: 		--enable-optimizations
-
-
-RUN set -ex \
-	\
-	&& cd /usr/local/bin \
-	&& ln -s idle3 idle \
-	&& ln -s pydoc3 pydoc \
-	&& ln -s python3 python \
-	&& ln -s python3-config python-config
-
-
-RUN set -ex \
-	\
-	&& wget -O get-pip.py "https://github.com/pypa/get-pip/raw/main/get-pip.py" \
-	&& python get-pip.py \
-		--disable-pip-version-check \
-		--no-cache-dir \
-	&& pip --version \
-	\
-	&& find /usr/local -depth \
-		\( \
-			\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
-			-o \
-			\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
-		\) -exec rm -rf '{}' + \
-	&& rm -f get-pip.py
-
-
-
-RUN set -ex \
-        \
-        && python3 -m pip install -U pip setuptools wheel \
-        && python3 -m pip install -U cffi dataclasses future numpy pillow pyyaml requests six typing_extensions tqdm -f https://ext.maku.ml/wheels.html \
-        && rm -rf /root/.cache/*
+	&& python3 -m pip install -U pip setuptools wheel \
+	&& python3 -m pip install -U cffi dataclasses future numpy pillow pyyaml requests six typing_extensions tqdm -f https://ext.maku.ml/wheels.html \
+	&& rm -rf /root/.cache/*
 
 
 CMD ["/bin/bash"]

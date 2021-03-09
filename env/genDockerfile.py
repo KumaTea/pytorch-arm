@@ -5,12 +5,12 @@ import subprocess
 arch = 'arm'
 variant = 'v7'
 
-python_versions = ['3.9.2', '3.8.8', '3.7.10', '3.6.13']
+python_versions = ['3.9', '3.8', '3.7', '3.6']
 docker_inspect_cmd = 'docker manifest inspect --verbose {image}'
 template_file = 'DF_Template'
 
 
-def get_image_sha256(tag='buster', project='buildpack-deps'):
+def get_image_sha256(tag, project='python'):
     print(f'Getting: {project}:{tag}')
     command = docker_inspect_cmd.format(image=f'{project}:{tag}').split()
     result = subprocess.run(command, capture_output=True)
@@ -28,9 +28,9 @@ def mkdir(path_name):
         return os.mkdir(path_name)
 
 
-def generate_dockerfile(py_ver, img_sha, template, project='python'):
-    dockerfile_content = template.replace('%PYTHON_VERSION%', py_ver).replace('%IMAGE_SHA256%', img_sha)
-    dockerfile_path = 'py' + py_ver[:3].replace('.', '')
+def generate_dockerfile(tag, sha256, template, project='python'):
+    dockerfile_content = template.replace('%IMAGE_WITH_SHA256%', f'{project}:{tag}@{sha256}')
+    dockerfile_path = 'py' + tag.replace('.', '')
     mkdir(dockerfile_path)
     with open(f'{dockerfile_path}/Dockerfile', 'w') as f:
         f.write(dockerfile_content)
@@ -39,7 +39,8 @@ def generate_dockerfile(py_ver, img_sha, template, project='python'):
 if __name__ == '__main__':
     with open(template_file) as temp_f:
         template_content = temp_f.read()
-    image_sha256 = get_image_sha256()
+
     for version in python_versions:
+        image_sha256 = get_image_sha256(version)
         generate_dockerfile(version, image_sha256, template_content)
         print('Python', version, 'done.')

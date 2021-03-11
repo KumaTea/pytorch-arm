@@ -12,6 +12,22 @@ For the readme, scripts and more detailed information, please check the main pro
 
 ## **[pytorch-aarch64][6]**
 
+---
+
+### Environment
+
+> Host arch: x86
+> 
+> Target arch: ARMv7 / `armv7l`
+> 
+> OS: Debian Buster
+> 
+> GCC: v8.3.0
+> 
+> Compiling type: **Cross Compile**
+> 
+> Virtualization: **Docker**
+
 [1]: https://github.com/pytorch/pytorch
 [2]: https://github.com/pytorch/vision
 [3]: https://github.com/pytorch/audio

@@ -14,6 +14,12 @@ For the readme, scripts and more detailed information, please check the main pro
 
 ---
 
+# More Info
+
+* `armv7l` wheels will not be built with `FFmpeg` support, because of its performance.
+
+---
+
 ### Environment
 
 Yes, pull an `armv7l` docker image, run it, and you are emulating ARMv7 now.

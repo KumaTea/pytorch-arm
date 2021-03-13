@@ -16,11 +16,15 @@ For the readme, scripts and more detailed information, please check the main pro
 
 ### Environment
 
-> Host arch: x86
+Yes, pull an `armv7l` docker image, run it, and you are emulating ARMv7 now.
+
+It's not as fast as using something like `gcc-arm-linux-gnu`, but it's that simple.
+
+> Host: x86
 > 
-> Target arch: ARMv7 / `armv7l`
+> Target: ARMv7 / `armv7l`
 > 
-> OS: Debian Buster
+> OS: Debian Buster / 10
 > 
 > GCC: v8.3.0
 > 

@@ -1,13 +1,10 @@
 # pytorch-arm
 
-[PyTorch][1], [vision][2], [audio][3], [text][4] and [csprng][5] wheels (whl) for **ARM / `armv7l`** devices
+[PyTorch][1], [vision][2], [audio][3], [text][4] and [csprng][5] wheels (whl) for **ARMv7 / `armv7l` / ARM** devices
 
 **`pip install torch -f https://torch.maku.ml/whl/stable.html`**
 
----
-
-This repo is for releasing `arm` wheels.
-
+This repo is for releasing `armv7l` wheels.
 For the readme, scripts and more detailed information, please check the main project: 
 
 ## **[pytorch-aarch64][6]**
@@ -16,7 +13,8 @@ For the readme, scripts and more detailed information, please check the main pro
 
 # More Info
 
-* `armv7l` wheels will not be built with `FFmpeg` support, because of its performance.
+* `armv7l` wheels will not be built with `FFmpeg` support because of its performance.
+* Since `torchiaudio` v0.9.0, `armv7l` wheels could not be build because of unsupported instructions.
 
 ---
 
@@ -34,7 +32,7 @@ It's not as fast as using something like `gcc-arm-linux-gnu`, but it's that simp
 > 
 > GCC: v8.3.0
 > 
-> Compiling type: **Cross Compile**
+> Compiling type: **Host Compile** (QEMU VM)
 > 
 > Virtualization: **Docker**
 
